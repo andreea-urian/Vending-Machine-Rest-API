@@ -5,13 +5,13 @@ using VendingMachine_RestAPI_Logic.APIModels.Request;
 
 namespace VendingMachine_RestAPI_Logic
 {
-    public class ProductService:IProductService
+    public class ProductService : IProductService
     {
         private readonly IProductRepository _repository;
 
         public ProductService(IProductRepository repository)
         {
-            _repository = repository?? throw new ArgumentNullException(nameof(_repository));
+            _repository = repository ?? throw new ArgumentNullException(nameof(_repository));
         }
 
         public async Task<int> CreateProduct(CreateOrUpdateProductRequest request)
@@ -31,6 +31,10 @@ namespace VendingMachine_RestAPI_Logic
         {
             var resultFromRepo = await _repository.Get(productId);
 
+            if (resultFromRepo is null)
+            {
+                return null;
+            }
             var result = Mapper.ProductDbModelToProductDTO(resultFromRepo);
 
             return result;

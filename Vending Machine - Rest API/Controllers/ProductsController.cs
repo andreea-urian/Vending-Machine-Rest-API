@@ -24,7 +24,7 @@ namespace Vending_Machine___Rest_API.Controllers
             return Ok(products);
         }
 
-        [HttpGet("{id}",Name ="GetProduct")]
+        [HttpGet("{id}", Name = "GetProduct")]
         public async Task<ActionResult<Product>> GetProduct([FromRoute] int id)
         {
             var product = await productService.GetProductById(id);
@@ -55,8 +55,8 @@ namespace Vending_Machine___Rest_API.Controllers
         [HttpPost]
         public async Task<IActionResult> AddProduct(CreateOrUpdateProductRequest request)
         {
-           var product= await productService.CreateProduct(request);
-            return CreatedAtRoute("GetProduct",product);
+            var product = await productService.CreateProduct(request);
+            return Ok();
         }
 
         [HttpDelete("{id}")]

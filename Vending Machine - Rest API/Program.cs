@@ -4,6 +4,7 @@ using VendingMachine_RestAPI_Logic.Abstaction;
 using VendingMachine_RestAPI_Logic;
 using VendinMachine_RestAPI_DataAccess;
 using VendinMachine_RestAPI_DataAccess.Repository;
+using Microsoft.AspNetCore.Mvc;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -26,7 +27,7 @@ builder.Services.AddCors(options =>
 });
 
 // Add Database Connection
-builder.Services.AddDbContext<VendingMachineRestAPI_DBContext>(opt => opt.UseSqlite(builder.Configuration.GetConnectionString("ConnectionStringDBProducts")));
+builder.Services.AddDbContext<VendingMachineRestAPI_DBContext>(opt => opt.UseSqlite(Environment.GetEnvironmentVariable("ConnectionStringDBProducts")!));
 
 //Add Sevices
 builder.Services.AddScoped<IProductRepository, ProductRepository>();
@@ -39,6 +40,13 @@ builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 
 var app = builder.Build();
+
+using (var scope = app.Services.CreateScope())
+{
+    var services = scope.ServiceProvider;
+    var dbContext = services.GetRequiredService<VendingMachineRestAPI_DBContext>();
+    dbContext.Database.Migrate();
+}
 
 // Configure the HTTP request pipeline.
 app.UseCors();

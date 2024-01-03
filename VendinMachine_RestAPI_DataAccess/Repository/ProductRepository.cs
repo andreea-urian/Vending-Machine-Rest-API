@@ -10,7 +10,7 @@ using VendingMachine_RestAPI_Logic.Abstaction;
 
 namespace VendinMachine_RestAPI_DataAccess.Repository
 {
-    public class ProductRepository:IProductRepository
+    public class ProductRepository : IProductRepository
     {
 
         private readonly VendingMachineRestAPI_DBContext _dbContext;
@@ -43,11 +43,6 @@ namespace VendinMachine_RestAPI_DataAccess.Repository
         public async Task<Product> Get(int id)
         {
             var productDB = await GetById(id);
-
-            if (productDB == null)
-            {
-                throw new EntityNotFoundException(id);
-            }
 
             return productDB;
         }
